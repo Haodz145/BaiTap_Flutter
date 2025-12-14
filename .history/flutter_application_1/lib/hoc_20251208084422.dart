@@ -1,0 +1,152 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Form Đăng Ký',
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFF0F4F8),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.purple,
+          foregroundColor: Colors.white,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+          filled: true,
+          fillColor: Colors.white,
+        ),
+      ),
+      home: const SimpleRegistrationScreen(),
+    );
+  }
+}
+SimpleRegistrationScreen
+class  extends StatefulWidget {
+  const SimpleRegistrationScreen({super.key});
+
+  @override
+  State<SimpleRegistrationScreen> createState() =>
+      _SimpleRegistrationScreenState();
+}
+
+class _SimpleRegistrationScreenState extends State<SimpleRegistrationScreen> {
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+
+  Widget myBody() {
+    return SingleChildScrollView(
+      child: Card(
+        margin: const EdgeInsets.all(16.0),
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                children: [
+                  const TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Họ tên',
+                      helperText: 'Vui lòng nhập họ tên',
+                      prefixIcon: Icon(Icons.person_outline),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  const TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      helperText: 'Vui lòng nhập email',
+                      // prefixIcon: Icon(Icons.email_outline),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    obscureText: !_isPasswordVisible,
+                    decoration: InputDecoration(
+                      labelText: 'Mật khẩu',
+                      helperText: 'Vui lòng nhập mật khẩu',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    obscureText: !_isConfirmPasswordVisible,
+                    decoration: InputDecoration(
+                      labelText: 'Xác nhận mật khẩu',
+                      helperText: 'Vui lòng xác nhận mật khẩu',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isConfirmPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isConfirmPasswordVisible =
+                                !_isConfirmPasswordVisible;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24.0),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.login),
+                    label: const Text('Đăng ký'),
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32.0,
+                        vertical: 12.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Form Đăng ký tài khoản'),
+        centerTitle: true,
+      ),
+      body: myBody(),
+    );
+  }
+}
