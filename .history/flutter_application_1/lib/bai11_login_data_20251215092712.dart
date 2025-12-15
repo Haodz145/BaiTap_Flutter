@@ -216,6 +216,9 @@ class Bai11ProfileScreen extends StatelessWidget {
   }
 }
 
+// ==========================================
+// 3. LOGIN SCREEN (ĐÃ TẮT CHECK MẬT KHẨU)
+// ==========================================
 class Bai11LoginPage extends StatefulWidget {
   const Bai11LoginPage({super.key});
 
@@ -258,9 +261,14 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
     );
   }
 
+  // --- HÀM LOGIN GIẢ LẬP ---
   Future<void> _handleLogin() async {
+    // Chỉ kiểm tra xem đã nhập chưa (nếu bạn muốn cho để trống luôn thì bỏ dòng if này đi)
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
+
+      // Giả vờ đợi 1 giây cho giống đang xử lý
+      await Future.delayed(const Duration(seconds: 1));
 
       if (!mounted) return;
 

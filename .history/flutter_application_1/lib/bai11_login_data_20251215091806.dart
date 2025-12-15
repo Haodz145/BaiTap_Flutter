@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+// ==========================================
+// 1. MODEL: Đầy đủ dữ liệu
+// ==========================================
 class UserProfile {
   final String firstName, lastName, image, title, email, phone, address;
   final String birthDate, gender, bloodGroup;
@@ -47,6 +50,9 @@ class UserProfile {
   }
 }
 
+// ==========================================
+// 2. MÀN HÌNH PROFILE: Giao diện Card
+// ==========================================
 class Bai11ProfileScreen extends StatelessWidget {
   final int userId;
   const Bai11ProfileScreen({super.key, required this.userId});
@@ -134,17 +140,10 @@ class Bai11ProfileScreen extends StatelessWidget {
       body: FutureBuilder(
         future: Dio().get('https://dummyjson.com/users/$userId'),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (!snapshot.hasData)
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFF9C27B0)),
             );
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text("Lỗi: ${snapshot.error}"));
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: Text("Không có dữ liệu"));
-          }
 
           final user = UserProfile.fromJson(snapshot.data!.data);
 
@@ -207,6 +206,13 @@ class Bai11ProfileScreen extends StatelessWidget {
                     _buildRowInfo(Icons.work, "Phòng ban", user.department),
                   ],
                 ),
+                _buildSectionCard(
+                  title: "Tài chính",
+                  children: [
+                    _buildRowInfo(Icons.credit_card, "Loại thẻ", user.cardType),
+                    _buildRowInfo(Icons.numbers, "Số thẻ", user.cardNumber),
+                  ],
+                ),
               ],
             ),
           );
@@ -216,7 +222,11 @@ class Bai11ProfileScreen extends StatelessWidget {
   }
 }
 
+// ==========================================
+// 3. MÀN HÌNH LOGIN (ĐÃ ĐỔI TÊN CLASS ĐỂ KHÔNG BỊ LỖI TRÙNG)
+// ==========================================
 class Bai11LoginPage extends StatefulWidget {
+  // <--- Đã đổi tên ở đây
   const Bai11LoginPage({super.key});
 
   @override
@@ -255,24 +265,47 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
         borderRadius: BorderRadius.circular(10.0),
         borderSide: const BorderSide(color: Color(0xFF9C27B0), width: 2),
       ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
     );
   }
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
+      try {
+        final dio = Dio();
+        final response = await dio.post(
+          'https://dummyjson.com/auth/login',
+          data: {
+            'username': _emailController.text.trim(),
+            'password': _passwordController.text.trim(),
+          },
+        );
 
-      if (!mounted) return;
+        if (response.statusCode == 200) {
+          if (!mounted) return;
+          int idFromServer = response.data['id'];
 
-      // Tắt loading
-      setState(() => _isLoading = false);
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Bai11ProfileScreen(userId: 1),
-        ),
-      );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Bai11ProfileScreen(userId: idFromServer),
+            ),
+          );
+        }
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Đăng nhập thất bại! Kiểm tra lại thông tin."),
+          ),
+        );
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -282,7 +315,7 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
       backgroundColor: const Color(0xFFF3E5F5),
       appBar: AppBar(
         title: const Text(
-          "Đăng nhập",
+          "Bài 11: Login Data",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -300,7 +333,7 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
               TextFormField(
                 controller: _emailController,
                 decoration: _inputDecoration(
-                  hintText: "Tài khoản",
+                  hintText: "Tài khoản (kminchelle)",
                   prefixIcon: Icons.email_outlined,
                 ),
                 validator: (value) => (value == null || value.isEmpty)
@@ -312,7 +345,7 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
                 controller: _passwordController,
                 obscureText: _isObscure,
                 decoration: _inputDecoration(
-                  hintText: "Mật khẩu",
+                  hintText: "Mật khẩu (0lelplR)",
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -327,8 +360,6 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
                     : null,
               ),
               const SizedBox(height: 40),
-
-              // --- Nút Đăng nhập ---
               SizedBox(
                 width: 200,
                 height: 50,
@@ -355,6 +386,11 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
                     ),
                   ),
                 ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "TK: kminchelle | MK: 0lelplR",
+                style: TextStyle(color: Colors.grey),
               ),
             ],
           ),

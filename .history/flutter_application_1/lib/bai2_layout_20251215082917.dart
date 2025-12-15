@@ -48,6 +48,7 @@ class LayoutExercisePage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
+              // 3. Ô TÌM KIẾM (TextField)
               TextField(
                 decoration: InputDecoration(
                   hintText: "Search",

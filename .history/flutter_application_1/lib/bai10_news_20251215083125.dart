@@ -133,6 +133,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // --- ẢNH BÀI VIẾT ---
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12),

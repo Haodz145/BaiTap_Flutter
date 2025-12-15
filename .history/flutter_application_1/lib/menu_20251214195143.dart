@@ -48,17 +48,11 @@ class AppDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/bai2');
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.hotel),
-            title: const Text('Bài 3: Địa điểm'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/bai3');
-            },
-          ),
+          // ... các bài trước
           ListTile(
             leading: const Icon(Icons.color_lens, color: Colors.purple),
             title: const Text('Bài 4: Đổi màu nền'),
+            subtitle: const Text('StatefulWidget & Random'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/bai4'); // Gọi route /bai4
@@ -70,6 +64,7 @@ class AppDrawer extends StatelessWidget {
               color: Colors.red,
             ), // Icon cộng trừ
             title: const Text('Bài 5: Đếm số'),
+            subtitle: const Text('Tăng - Giảm - Reset'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/bai5');
@@ -105,6 +100,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.shopping_bag, color: Colors.amber),
             title: const Text('Bài 9: Sản phẩm'),
+            subtitle: const Text('Fetch Data & GridView'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/bai9');
@@ -121,6 +117,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.send_to_mobile, color: Colors.teal),
             title: const Text('Bài 11: Đăng Nhập Trả Dữ Liệu'),
+            subtitle: const Text('Navigator.push có tham số'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/bai11');

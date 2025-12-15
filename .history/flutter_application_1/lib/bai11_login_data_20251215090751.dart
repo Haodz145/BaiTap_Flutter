@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+// ==========================================
+// 1. MODEL: Mở rộng để hứng đủ dữ liệu hiển thị lên Profile giống ảnh
+// ==========================================
 class UserProfile {
   final String firstName, lastName, image, title, email, phone, address;
+  // Các trường bổ sung để giống ảnh mẫu (Ngày sinh, Nhóm máu, Công ty, Thẻ...)
   final String birthDate, gender, bloodGroup;
   final double height;
   final String companyName, department;
@@ -35,6 +39,7 @@ class UserProfile {
       email: json['email'],
       phone: json['phone'],
       address: "${json['address']['address']}, ${json['address']['city']}",
+      // Map thêm các trường chi tiết
       birthDate: json['birthDate'],
       gender: json['gender'],
       bloodGroup: json['bloodGroup'],
@@ -47,10 +52,14 @@ class UserProfile {
   }
 }
 
+// ==========================================
+// 2. MÀN HÌNH PROFILE: Giao diện Card (Thẻ) giống hệt ảnh chụp
+// ==========================================
 class Bai11ProfileScreen extends StatelessWidget {
   final int userId;
   const Bai11ProfileScreen({super.key, required this.userId});
 
+  // Widget con: 1 dòng thông tin (Icon - Tiêu đề - Nội dung)
   Widget _buildRowInfo(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -83,6 +92,7 @@ class Bai11ProfileScreen extends StatelessWidget {
     );
   }
 
+  // Widget con: 1 cái Thẻ (Card) màu trắng
   Widget _buildSectionCard({
     required String title,
     required List<Widget> children,
@@ -122,29 +132,22 @@ class Bai11ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E5F5),
+      backgroundColor: const Color(0xFFF3E5F5), // Nền tím nhạt chuẩn ảnh
       appBar: AppBar(
         title: const Text(
           "Hồ sơ người dùng",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFF9C27B0),
+        backgroundColor: const Color(0xFF9C27B0), // AppBar tím đậm chuẩn ảnh
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder(
         future: Dio().get('https://dummyjson.com/users/$userId'),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (!snapshot.hasData)
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFF9C27B0)),
             );
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text("Lỗi: ${snapshot.error}"));
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: Text("Không có dữ liệu"));
-          }
 
           final user = UserProfile.fromJson(snapshot.data!.data);
 
@@ -152,6 +155,7 @@ class Bai11ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
+                // Phần Avatar + Tên
                 Center(
                   child: Column(
                     children: [
@@ -179,6 +183,8 @@ class Bai11ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
+
+                // Card 1: Thông tin cá nhân
                 _buildSectionCard(
                   title: "Thông tin cá nhân",
                   children: [
@@ -192,6 +198,7 @@ class Bai11ProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+                // Card 2: Liên hệ
                 _buildSectionCard(
                   title: "Liên hệ & Địa chỉ",
                   children: [
@@ -200,11 +207,20 @@ class Bai11ProfileScreen extends StatelessWidget {
                     _buildRowInfo(Icons.location_on, "Địa chỉ", user.address),
                   ],
                 ),
+                // Card 3: Công việc
                 _buildSectionCard(
                   title: "Công việc",
                   children: [
                     _buildRowInfo(Icons.business, "Công ty", user.companyName),
                     _buildRowInfo(Icons.work, "Phòng ban", user.department),
+                  ],
+                ),
+                // Card 4: Tài chính
+                _buildSectionCard(
+                  title: "Tài chính",
+                  children: [
+                    _buildRowInfo(Icons.credit_card, "Loại thẻ", user.cardType),
+                    _buildRowInfo(Icons.numbers, "Số thẻ", user.cardNumber),
                   ],
                 ),
               ],
@@ -216,14 +232,17 @@ class Bai11ProfileScreen extends StatelessWidget {
   }
 }
 
-class Bai11LoginPage extends StatefulWidget {
-  const Bai11LoginPage({super.key});
+// ==========================================
+// 3. MÀN HÌNH LOGIN
+// ==========================================
+class LoginExercisePage extends StatefulWidget {
+  const LoginExercisePage({super.key});
 
   @override
-  State<Bai11LoginPage> createState() => _Bai11LoginPageState();
+  State<LoginExercisePage> createState() => _LoginExercisePageState();
 }
 
-class _Bai11LoginPageState extends State<Bai11LoginPage> {
+class _LoginExercisePageState extends State<LoginExercisePage> {
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
   bool _isLoading = false;
@@ -241,15 +260,15 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
-      prefixIcon: Icon(prefixIcon, color: Colors.black54),
+      prefixIcon: Icon(prefixIcon, color: Colors.grey[600]), // Màu icon xám
       suffixIcon: suffixIcon,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: const BorderSide(color: Colors.black54),
+        borderSide: const BorderSide(color: Colors.grey),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: const BorderSide(color: Colors.black54),
+        borderSide: const BorderSide(color: Colors.grey),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -261,32 +280,50 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
+      try {
+        final dio = Dio();
+        final response = await dio.post(
+          'https://dummyjson.com/auth/login',
+          data: {
+            'username': _emailController.text.trim(),
+            'password': _passwordController.text.trim(),
+          },
+        );
 
-      if (!mounted) return;
-
-      // Tắt loading
-      setState(() => _isLoading = false);
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Bai11ProfileScreen(userId: 1),
-        ),
-      );
+        if (response.statusCode == 200) {
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Bai11ProfileScreen(userId: response.data['id']),
+            ),
+          );
+        }
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Đăng nhập thất bại! Kiểm tra lại thông tin."),
+          ),
+        );
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E5F5),
+      backgroundColor: const Color(0xFFF3E5F5), // Nền tím nhạt
       appBar: AppBar(
         title: const Text(
-          "Đăng nhập",
+          "Form Đăng nhập",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF9C27B0),
+        backgroundColor: const Color(0xFF9C27B0), // Tím đậm
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
@@ -297,22 +334,27 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 30),
+
+              // Username
               TextFormField(
                 controller: _emailController,
                 decoration: _inputDecoration(
-                  hintText: "Tài khoản",
+                  hintText: "Tài khoản (kminchelle)",
                   prefixIcon: Icons.email_outlined,
                 ),
                 validator: (value) => (value == null || value.isEmpty)
                     ? 'Vui lòng nhập tài khoản'
                     : null,
               ),
+
               const SizedBox(height: 20),
+
+              // Password
               TextFormField(
                 controller: _passwordController,
                 obscureText: _isObscure,
                 decoration: _inputDecoration(
-                  hintText: "Mật khẩu",
+                  hintText: "Mật khẩu (0lelplR)",
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -326,35 +368,51 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
                     ? 'Vui lòng nhập mật khẩu'
                     : null,
               ),
+
               const SizedBox(height: 40),
 
-              // --- Nút Đăng nhập ---
+              // Nút Đăng nhập (GIỮ NGUYÊN LOGIC BẠN GỬI)
               SizedBox(
                 width: 200,
                 height: 50,
-                child: ElevatedButton.icon(
+                child: ElevatedButton(
                   onPressed: _isLoading ? null : _handleLogin,
-                  icon: _isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Icon(Icons.login, color: Colors.white),
-                  label: const Text(
-                    "Đăng nhập",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF9C27B0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.login, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text(
+                              "Đăng nhập",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
+              ),
+
+              const SizedBox(height: 20),
+              const Text(
+                "TK: kminchelle | MK: 0lelplR",
+                style: TextStyle(color: Colors.grey),
               ),
             ],
           ),

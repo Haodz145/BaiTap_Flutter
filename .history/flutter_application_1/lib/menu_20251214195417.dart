@@ -48,14 +48,7 @@ class AppDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/bai2');
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.hotel),
-            title: const Text('Bài 3: Địa điểm'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/bai3');
-            },
-          ),
+          // ... các bài trước
           ListTile(
             leading: const Icon(Icons.color_lens, color: Colors.purple),
             title: const Text('Bài 4: Đổi màu nền'),

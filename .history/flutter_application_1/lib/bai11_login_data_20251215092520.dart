@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+// ==========================================
+// 1. MODEL & PROFILE SCREEN (Giữ nguyên để hiển thị dữ liệu)
+// ==========================================
 class UserProfile {
   final String firstName, lastName, image, title, email, phone, address;
   final String birthDate, gender, bloodGroup;
@@ -132,6 +135,7 @@ class Bai11ProfileScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder(
+        // Vẫn gọi API để lấy dữ liệu hiển thị (theo ID mặc định)
         future: Dio().get('https://dummyjson.com/users/$userId'),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -216,6 +220,9 @@ class Bai11ProfileScreen extends StatelessWidget {
   }
 }
 
+// ==========================================
+// 3. LOGIN SCREEN (ĐÃ TẮT CHECK MẬT KHẨU)
+// ==========================================
 class Bai11LoginPage extends StatefulWidget {
   const Bai11LoginPage({super.key});
 
@@ -258,15 +265,22 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
     );
   }
 
+  // --- HÀM LOGIN GIẢ LẬP ---
   Future<void> _handleLogin() async {
+    // Chỉ kiểm tra xem đã nhập chưa (nếu bạn muốn cho để trống luôn thì bỏ dòng if này đi)
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
+
+      // Giả vờ đợi 1 giây cho giống đang xử lý
+      await Future.delayed(const Duration(seconds: 1));
 
       if (!mounted) return;
 
       // Tắt loading
       setState(() => _isLoading = false);
 
+      // Chuyển trang luôn, không cần check API
+      // Mặc định load Profile của user số 1 (bạn có thể sửa số 1 thành số khác từ 1-100)
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -282,7 +296,7 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
       backgroundColor: const Color(0xFFF3E5F5),
       appBar: AppBar(
         title: const Text(
-          "Đăng nhập",
+          "Đăng nhập (Demo)",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -297,17 +311,21 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 30),
+              // --- Input Tài khoản (Nhập gì cũng được) ---
               TextFormField(
                 controller: _emailController,
                 decoration: _inputDecoration(
                   hintText: "Tài khoản",
                   prefixIcon: Icons.email_outlined,
                 ),
+                // Vẫn giữ validator cơ bản để không bị null, nhưng cho nhập mọi thứ
                 validator: (value) => (value == null || value.isEmpty)
                     ? 'Vui lòng nhập tài khoản'
                     : null,
               ),
               const SizedBox(height: 20),
+
+              // --- Input Mật khẩu (Nhập gì cũng được) ---
               TextFormField(
                 controller: _passwordController,
                 obscureText: _isObscure,
@@ -354,6 +372,14 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "Chế độ Demo: Nhập gì cũng vào được",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontStyle: FontStyle.italic,
                 ),
               ),
             ],

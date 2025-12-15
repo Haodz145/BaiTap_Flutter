@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+// ==========================================
+// 1. MODEL DỮ LIỆU (Để lấy đúng các trường trong ảnh)
+// ==========================================
 class UserProfile {
   final String firstName, lastName, image, title, email, phone, address;
   final String birthDate, gender, bloodGroup;
@@ -47,10 +50,14 @@ class UserProfile {
   }
 }
 
+// ==========================================
+// 2. MÀN HÌNH PROFILE (DESIGN Y HỆT ẢNH 2 & 3)
+// ==========================================
 class Bai11ProfileScreen extends StatelessWidget {
   final int userId;
   const Bai11ProfileScreen({super.key, required this.userId});
 
+  // Widget vẽ từng dòng thông tin (Icon + Label + Value)
   Widget _buildRowInfo(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -83,6 +90,7 @@ class Bai11ProfileScreen extends StatelessWidget {
     );
   }
 
+  // Widget vẽ cái khung (Card) bao quanh mỗi mục
   Widget _buildSectionCard({
     required String title,
     required List<Widget> children,
@@ -122,13 +130,13 @@ class Bai11ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E5F5),
+      backgroundColor: const Color(0xFFF3E5F5), // Nền tím nhạt chuẩn ảnh
       appBar: AppBar(
         title: const Text(
           "Hồ sơ người dùng",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFF9C27B0),
+        backgroundColor: const Color(0xFF9C27B0), // Tím đậm chuẩn ảnh
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder(
@@ -140,10 +148,7 @@ class Bai11ProfileScreen extends StatelessWidget {
             );
           }
           if (snapshot.hasError) {
-            return Center(child: Text("Lỗi: ${snapshot.error}"));
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: Text("Không có dữ liệu"));
+            return const Center(child: Text("Lỗi tải dữ liệu"));
           }
 
           final user = UserProfile.fromJson(snapshot.data!.data);
@@ -152,6 +157,7 @@ class Bai11ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
+                // Avatar và Tên
                 Center(
                   child: Column(
                     children: [
@@ -179,6 +185,8 @@ class Bai11ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
+
+                // Card 1: Thông tin cá nhân
                 _buildSectionCard(
                   title: "Thông tin cá nhân",
                   children: [
@@ -192,6 +200,8 @@ class Bai11ProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+
+                // Card 2: Liên hệ & Địa chỉ
                 _buildSectionCard(
                   title: "Liên hệ & Địa chỉ",
                   children: [
@@ -200,11 +210,22 @@ class Bai11ProfileScreen extends StatelessWidget {
                     _buildRowInfo(Icons.location_on, "Địa chỉ", user.address),
                   ],
                 ),
+
+                // Card 3: Công việc
                 _buildSectionCard(
                   title: "Công việc",
                   children: [
                     _buildRowInfo(Icons.business, "Công ty", user.companyName),
                     _buildRowInfo(Icons.work, "Phòng ban", user.department),
+                  ],
+                ),
+
+                // Card 4: Tài chính
+                _buildSectionCard(
+                  title: "Tài chính",
+                  children: [
+                    _buildRowInfo(Icons.credit_card, "Loại thẻ", user.cardType),
+                    _buildRowInfo(Icons.numbers, "Số thẻ", user.cardNumber),
                   ],
                 ),
               ],
@@ -216,14 +237,17 @@ class Bai11ProfileScreen extends StatelessWidget {
   }
 }
 
-class Bai11LoginPage extends StatefulWidget {
-  const Bai11LoginPage({super.key});
+// ==========================================
+// 3. MÀN HÌNH LOGIN (DESIGN Y HỆT ẢNH 1)
+// ==========================================
+class LoginExercisePage extends StatefulWidget {
+  const LoginExercisePage({super.key});
 
   @override
-  State<Bai11LoginPage> createState() => _Bai11LoginPageState();
+  State<LoginExercisePage> createState() => _LoginExercisePageState();
 }
 
-class _Bai11LoginPageState extends State<Bai11LoginPage> {
+class _LoginExercisePageState extends State<LoginExercisePage> {
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
   bool _isLoading = false;
@@ -231,6 +255,7 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Style input giống hệt ảnh 1
   InputDecoration _inputDecoration({
     required String hintText,
     required IconData prefixIcon,
@@ -241,16 +266,18 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
-      prefixIcon: Icon(prefixIcon, color: Colors.black54),
+      prefixIcon: Icon(prefixIcon, color: Colors.grey[600]),
       suffixIcon: suffixIcon,
+      // Viền bình thường màu xám
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: const BorderSide(color: Colors.black54),
+        borderSide: const BorderSide(color: Colors.grey),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: const BorderSide(color: Colors.black54),
+        borderSide: const BorderSide(color: Colors.grey),
       ),
+      // Viền khi bấm vào màu tím
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
         borderSide: const BorderSide(color: Color(0xFF9C27B0), width: 2),
@@ -261,53 +288,74 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
+      try {
+        final dio = Dio();
+        final response = await dio.post(
+          'https://dummyjson.com/auth/login',
+          data: {
+            'username': _emailController.text.trim(),
+            'password': _passwordController.text.trim(),
+          },
+        );
 
-      if (!mounted) return;
-
-      // Tắt loading
-      setState(() => _isLoading = false);
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Bai11ProfileScreen(userId: 1),
-        ),
-      );
+        if (response.statusCode == 200) {
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Bai11ProfileScreen(userId: response.data['id']),
+            ),
+          );
+        }
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Sai tài khoản hoặc mật khẩu!"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E5F5),
+      backgroundColor: const Color(0xFFF3E5F5), // Nền tím nhạt
       appBar: AppBar(
         title: const Text(
-          "Đăng nhập",
+          "Form Đăng nhập",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF9C27B0),
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: const Color(0xFF9C27B0), // Tím đậm
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 30),
+
+              // Ô Email (Nhập username: kminchelle)
               TextFormField(
                 controller: _emailController,
                 decoration: _inputDecoration(
-                  hintText: "Tài khoản",
+                  hintText: "Email",
                   prefixIcon: Icons.email_outlined,
                 ),
-                validator: (value) => (value == null || value.isEmpty)
-                    ? 'Vui lòng nhập tài khoản'
-                    : null,
+                validator: (value) =>
+                    value!.isEmpty ? 'Vui lòng nhập email' : null,
               ),
+
               const SizedBox(height: 20),
+
+              // Ô Mật khẩu (Nhập pass: 0lelplR)
               TextFormField(
                 controller: _passwordController,
                 obscureText: _isObscure,
@@ -317,18 +365,18 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isObscure ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.grey[700],
+                      color: Colors.grey[600],
                     ),
                     onPressed: () => setState(() => _isObscure = !_isObscure),
                   ),
                 ),
-                validator: (value) => (value == null || value.isEmpty)
-                    ? 'Vui lòng nhập mật khẩu'
-                    : null,
+                validator: (value) =>
+                    value!.isEmpty ? 'Vui lòng nhập mật khẩu' : null,
               ),
+
               const SizedBox(height: 40),
 
-              // --- Nút Đăng nhập ---
+              // Nút Đăng nhập màu tím
               SizedBox(
                 width: 200,
                 height: 50,
@@ -349,12 +397,18 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF9C27B0),
+                    backgroundColor: const Color(0xFF9C27B0), // Màu tím nút
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
+              ),
+
+              const SizedBox(height: 20),
+              const Text(
+                "User: kminchelle | Pass: 0lelplR",
+                style: TextStyle(color: Colors.grey),
               ),
             ],
           ),

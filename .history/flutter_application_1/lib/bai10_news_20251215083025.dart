@@ -59,6 +59,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   }
 
   Future<void> _fetchNews() async {
+    // API lấy tin về Bitcoin hoặc Apple
     String url =
         'https://newsapi.org/v2/everything?q=bitcoin&sortBy=publishedAt&apiKey=1e65d2ff6bd64e6cb84fe613006adf49';
     try {
@@ -85,6 +86,8 @@ class _NewsListScreenState extends State<NewsListScreen> {
     }
   }
 
+  // --- HÀM TẠO URL ẢNH NGẪU NHIÊN ---
+  // Dùng tiêu đề bài viết làm "hạt giống" (seed) để mỗi bài có 1 ảnh riêng biệt
   String _getRandomImageUrl(String seed) {
     return 'https://picsum.photos/seed/${seed.hashCode}/600/300';
   }
@@ -93,7 +96,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tin Tức"),
+        title: const Text("Tin Tức (Có Ảnh Random)"),
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
@@ -113,6 +116,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   }
 
   Widget _buildNewsCard(Article article) {
+    // Nếu API không trả về link ảnh -> Dùng ảnh random ngay lập tức
     String finalImageUrl =
         article.urlToImage ?? _getRandomImageUrl(article.title ?? 'news');
 
@@ -133,6 +137,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // --- ẢNH BÀI VIẾT ---
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12),

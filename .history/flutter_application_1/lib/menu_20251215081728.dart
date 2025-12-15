@@ -49,7 +49,7 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.hotel),
+            leading: const Icon(Icons.dashboard),
             title: const Text('Bài 3: Địa điểm'),
             onTap: () {
               Navigator.pop(context);

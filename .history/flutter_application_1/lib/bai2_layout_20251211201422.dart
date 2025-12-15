@@ -27,7 +27,10 @@ class LayoutExercisePage extends StatelessWidget {
                   ),
                 ],
               ),
+
               const SizedBox(height: 20), // Khoảng cách
+              // 2. TEXT CHÀO MỪNG (RichText)
+              // Trong slide: "Welcome," đậm, "Charlie" thường
               const Text.rich(
                 TextSpan(
                   style: TextStyle(fontSize: 30, color: Colors.black),
@@ -48,6 +51,7 @@ class LayoutExercisePage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
+              // 3. Ô TÌM KIẾM (TextField)
               TextField(
                 decoration: InputDecoration(
                   hintText: "Search",

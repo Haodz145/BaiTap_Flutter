@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_application_1/bai3_diadiem.dart';
 
 // --- IMPORT MENU ---
 import 'menu.dart';
@@ -37,7 +35,8 @@ class MyHomeworkApp extends StatelessWidget {
         '/': (context) => const HomeScreen(),
         '/bai1': (context) => const CourseListScreen(),
         '/bai2': (context) => const LayoutExercisePage(),
-        '/bai3': (context) => BookingScreen(),
+        '/bai3': (context) => const LB(),
+
         '/bai4': (context) => ChangeColorApp(),
         '/bai5': (context) => const CounterApp(),
         '/bai6': (context) => const TimerApp(),
@@ -45,7 +44,7 @@ class MyHomeworkApp extends StatelessWidget {
         '/bai8': (context) => const LoginExercisePage(),
         '/bai9': (context) => const ProductListScreen(),
         '/bai10': (context) => const NewsListScreen(),
-        '/bai11': (context) => const Bai11LoginPage(),
+        '/bai11': (context) => const LoginProfileScreen(),
       },
     );
   }
@@ -87,6 +86,11 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
           ],
+        ),
+      ),
+    );
+  }
+}
         ),
       ),
     );

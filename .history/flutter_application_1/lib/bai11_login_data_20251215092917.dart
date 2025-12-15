@@ -262,6 +262,8 @@ class _Bai11LoginPageState extends State<Bai11LoginPage> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
+      // await Future.delayed(const Duration(seconds: 1));
+
       if (!mounted) return;
 
       // Tắt loading

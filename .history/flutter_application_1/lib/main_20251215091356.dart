@@ -45,7 +45,7 @@ class MyHomeworkApp extends StatelessWidget {
         '/bai8': (context) => const LoginExercisePage(),
         '/bai9': (context) => const ProductListScreen(),
         '/bai10': (context) => const NewsListScreen(),
-        '/bai11': (context) => const Bai11LoginPage(),
+        '/bai11': (context) => const LoginProfileScreen(),
       },
     );
   }

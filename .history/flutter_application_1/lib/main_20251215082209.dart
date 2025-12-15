@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/bai3_diadiem.dart';
 
 // --- IMPORT MENU ---
 import 'menu.dart';
@@ -7,7 +6,7 @@ import 'menu.dart';
 // --- IMPORT CÁC BÀI TẬP (Đảm bảo tên file đúng với project của bạn) ---
 import 'bai1_khoahoc.dart';
 import 'bai2_layout.dart';
-// import 'bai3_lake.dart'; // Hoặc bai3_pavlova.dart
+import 'bai3_diadiem.dart';
 import 'bai4_doimau.dart';
 import 'bai5_counter.dart';
 import 'bai6_timer.dart';
@@ -31,13 +30,12 @@ class MyHomeworkApp extends StatelessWidget {
       title: 'Tổng hợp Bài tập Flutter',
       theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
 
-      // --- BẢN ĐỒ ĐƯỜNG DẪN (ROUTES) ---
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
         '/bai1': (context) => const CourseListScreen(),
         '/bai2': (context) => const LayoutExercisePage(),
-        '/bai3': (context) => BookingScreen(),
+        '/bai3': (context) => const BookingScreen(),
         '/bai4': (context) => ChangeColorApp(),
         '/bai5': (context) => const CounterApp(),
         '/bai6': (context) => const TimerApp(),
@@ -45,13 +43,12 @@ class MyHomeworkApp extends StatelessWidget {
         '/bai8': (context) => const LoginExercisePage(),
         '/bai9': (context) => const ProductListScreen(),
         '/bai10': (context) => const NewsListScreen(),
-        '/bai11': (context) => const Bai11LoginPage(),
+        '/bai11': (context) => const LoginProfileScreen(),
       },
     );
   }
 }
 
-// --- MÀN HÌNH TRANG CHỦ ---
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 

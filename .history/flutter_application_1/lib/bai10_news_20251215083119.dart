@@ -113,6 +113,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   }
 
   Widget _buildNewsCard(Article article) {
+    // Nếu API không trả về link ảnh -> Dùng ảnh random ngay lập tức
     String finalImageUrl =
         article.urlToImage ?? _getRandomImageUrl(article.title ?? 'news');
 
@@ -133,6 +134,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // --- ẢNH BÀI VIẾT ---
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12),
